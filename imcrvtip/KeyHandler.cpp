@@ -126,7 +126,9 @@ HRESULT CTextService::_HandleKey(TfEditCookie ec, ITfContext *pContext, WPARAM w
 		switch(sf)
 		{
 		case SKK_ENTER:
-			sf = SKK_PURGE_DIC;
+			// Enterで削除確定は誤爆しそうなので、Enterは無視する
+			//sf = SKK_PURGE_DIC;
+			return S_FALSE;
 			break;
 		case SKK_CANCEL:
 			purgedicmode = FALSE;
