@@ -45,7 +45,7 @@ HRESULT CTextService::_Update(TfEditCookie ec, ITfContext *pContext, BOOL fixed,
 			{
 				if(purgedicmode)
 				{
-					comptext.append(L" [削除?(Y/n)]");
+					comptext.append(L" [削除?(y/n)]");
 				}
 				else
 				{
