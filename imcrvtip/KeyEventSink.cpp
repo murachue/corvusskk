@@ -176,6 +176,13 @@ STDAPI CTextService::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEate
 		}
 		else
 		{
+			// 確定していない文字列がある場合は、ここで確定する
+			// TODO: _IsComposingは変換や単語登録も含まれるのか?というか単語登録とかどうするのか??
+			if(_IsComposing())
+			{
+				_HandleCharReturnComposition(pic);
+			}
+
 			_ClearComposition();
 		}
 		_SetKeyboardOpen(fOpen ? FALSE : TRUE);

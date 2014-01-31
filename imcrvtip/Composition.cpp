@@ -257,3 +257,38 @@ void CTextService::_ClearComposition()
 		}
 	}
 }
+
+class CHandleCharReturnCompositionEditSession : public CEditSessionBase
+{
+public:
+	CHandleCharReturnCompositionEditSession(CTextService *pTextService, ITfContext *pContext) : CEditSessionBase(pTextService, pContext)
+	{
+	}
+
+	// ITfEditSession
+	STDMETHODIMP DoEditSession(TfEditCookie ec)
+	{
+		// CTextService::_HandleControlのSKK_ENTER相当
+		_pTextService->_ConvRoman();
+		_pTextService->_HandleCharReturn(ec, _pContext, FALSE);
+		return S_OK;
+	}
+};
+
+// ほぼCTextService::_InvokeKeyHandlerコピペ
+void CTextService::_HandleCharReturnComposition(ITfContext *pContext)
+{
+	HRESULT hr = E_FAIL;
+
+	try
+	{
+		CHandleCharReturnCompositionEditSession *pEditSession = new CHandleCharReturnCompositionEditSession(this, pContext);
+		pContext->RequestEditSession(_ClientId, pEditSession, TF_ES_SYNC | TF_ES_READWRITE, &hr);
+		SafeRelease(&pEditSession);
+	}
+	catch(...)
+	{
+	}
+
+	return;
+}
