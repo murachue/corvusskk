@@ -118,6 +118,7 @@ public:
 	void _EndComposition(ITfContext *pContext);
 	void _CancelComposition(TfEditCookie ec, ITfContext *pContext);
 	void _ClearComposition();
+	void _HandleCharReturnComposition(ITfContext *pContext);
 
 	// LanguageBar
 	void _UpdateLanguageBar(BOOL showinputmode = TRUE);
