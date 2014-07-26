@@ -106,7 +106,6 @@
     <InstallExecuteSequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWERFOUND</Custom>
       <RemoveExistingProducts After="InstallInitialize" />
-      <ScheduleReboot After="InstallFinalize" />
     </InstallExecuteSequence>
 
     <Condition Message="This application does not support this version of Windows.">
