@@ -602,17 +602,17 @@ HRESULT CTextService::_HandleControl(TfEditCookie ec, ITfContext *pContext, BYTE
 				return S_OK;
 			}
 		}
-		if(inputkey && roman.empty() && kana.empty())
+		if(inputkey && roman.empty() && kana.empty()) // ▽だけの状態でSKK_BACK
 		{
 			_HandleCharReturn(ec, pContext);
 			return S_OK;
 		}
-		if(!roman.empty())
+		if(!roman.empty()) // ローマ字入力中(例:「▽あky|」)
 		{
 			roman.pop_back();
 			if(roman.empty())
 			{
-				if(okuriidx != 0 && okuriidx + 1 == cursoridx)
+				if(okuriidx != 0 && okuriidx + 1 == cursoridx) // 送りがな入力状態で送りがな無い状態(例:「▽あか*|」の状態)でSKK_BACKした
 				{
 					kana.erase(cursoridx - 1, 1);
 					cursoridx--;
@@ -665,7 +665,7 @@ HRESULT CTextService::_HandleControl(TfEditCookie ec, ITfContext *pContext, BYTE
 			}
 		}
 
-		if(!inputkey && roman.empty() && kana.empty())
+		if(/*!inputkey &&*/ roman.empty() && kana.empty()) // 削除後に▽だけ残っている状態
 		{
 			_HandleCharReturn(ec, pContext);
 		}
@@ -728,7 +728,14 @@ HRESULT CTextService::_HandleControl(TfEditCookie ec, ITfContext *pContext, BYTE
 		}
 		else
 		{
-			_Update(ec, pContext);
+			if(roman.empty() && kana.empty()) // 削除後に▽だけ残っている状態
+			{
+				_HandleCharReturn(ec, pContext);
+			}
+			else
+			{
+				_Update(ec, pContext);
+			}
 		}
 		return S_OK;
 		break;
